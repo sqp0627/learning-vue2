@@ -4,8 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-/*import api from '../api/api.js'
-global.API = api*/
+// import api from '../api/api.js'
+// global.API = api
 // console.log(global.API)
 
 Vue.config.productionTip = false
