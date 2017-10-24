@@ -47,7 +47,7 @@
   @import "./common/stylus/mixin.styl"
   @import "./common/stylus/base.styl"
   @import "./common/stylus/icon.styl"
- /* #app
+  #app
     .tab
       display:flex
       width: 100%
@@ -63,5 +63,4 @@
           color: rgb(77,85,93)
           &.active
             color: rgb(240,20,20)
-*/
 </style>
