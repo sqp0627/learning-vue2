@@ -35,22 +35,14 @@
             <div class="star-wrapper">
               <star :size="48" :score="seller.score"></star>
             </div>
-            <div class="title">
-              <div class="line"></div>
-              <div class="text">优惠信息</div>
-              <div class="line"></div>
-            </div>
+            <v-title :titleName="titleName[0]"></v-title>
             <ul v-if="seller.supports" class="supports">
               <li class="support-item" v-for="(item,index) in seller.supports">
                 <span class="icon" :class="classMap[seller.supports[index].type]"></span>
                 <span class="text">{{seller.supports[index].description}}</span>
               </li>
             </ul>
-            <div class="title">
-              <div class="line"></div>
-              <div class="text">商家公告</div>
-              <div class="line"></div>
-            </div>
+            <v-title :titleName="titleName[1]"></v-title>
             <div class="bulletin">
               <p class="content">{{seller.bulletin}}</p>
             </div>
@@ -65,6 +57,7 @@
 </template>
 <script>
   import star from '../star/star.vue'
+  import title from '../title/title.vue'
   export default {
     props: {
       seller: {
@@ -73,7 +66,8 @@
     },
     data() {
       return {
-        detailShow: false
+        detailShow: false,
+        titleName: ['优惠信息', '商家公告']
       }
     },
     methods: {
@@ -88,7 +82,8 @@
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
     },
     components: {
-      star
+      star,
+      'v-title': title
     }
   }
 </script>
@@ -242,19 +237,8 @@
             margin-top: 16px
             padding:2px 0
             text-align: center
-          .title
-            display: flex
+          .v-title
             width: 80%
-            margin: 28px auto 24px auto
-            .line
-              flex: 1
-              position: relative;
-              top: -6px
-              border-bottom:1px solid rgba(255,255,255,0.2)
-            .text
-              padding:0 12px
-              font-weight: 700
-              font-size: 14px
           .supports
             width:80%
             margin: 0 auto
