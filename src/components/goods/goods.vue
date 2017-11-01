@@ -25,17 +25,23 @@
                 <div class="price">
                   <span class="now">￥{{food.price}}</span><span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="carcontroll-wapper">
+                  <carcontroll :food="food"></carcontroll>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
+    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
+  import shopcart from '../shopcart/shopcart.vue'
+  import carcontroll from '../cartcontroll/cartcontroll.vue'
 
   const ERR_OK = 0
   export default {
@@ -78,14 +84,16 @@
     },
     methods: {
       selectMenu(index, event) {
-        if (!event._constructed) {  //  过滤掉原生的点击事件
+        if (!event._constructed) { // 阻止betterScroll派发的点击事件
           return
         }
-        console.log(index)
+        let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook')
+        let el = foodList[index]
+        this.foodScroll.scrollToElement(el, 300)
       },
       _initScroll() {
         this.menuScroll = new BScroll(this.$refs.menuWrapper, {
-          click: true
+          click: true  // 初始化左侧导航菜单滚动时，允许点击事件
         })
 
         this.foodScroll = new BScroll(this.$refs.foodsWrapper, {
@@ -105,6 +113,10 @@
           this.listHeight.push(height)
         }
       }
+    },
+    components: {
+      shopcart,
+      carcontroll
     }
   }
 </script>
@@ -129,12 +141,13 @@
         padding: 0 12px
         line-height: 14px
         &.current
-          position: relative
-          margin-top: -1px
           background: #fff
+          position: relative;
+          margin-top: -1px
+          z-index: 10
           .text
-            font-weight: 700
             border-none()
+            font-weight: 700
         .icon
           display: inline-block
           width: 18px
