@@ -216,7 +216,7 @@
       width: 100%
       height: 100%
       overflow: auto
-      z-index: 1
+      z-index: 51
       background: rgba(7,17,27,0.8)
       &.fade-enter-active, &.fade-leave-active
         transition: all 0.5s

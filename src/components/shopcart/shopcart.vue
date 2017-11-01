@@ -15,6 +15,11 @@
       <div class="pay" :class="{'enough':totalPrice > minPrice }">{{payDesc}}</div>
     </div>
   </div>
+  <transition-group name="drop" tag="div" class="ball-container">
+    <div v-for="(ball,index) in balls" :key="index" v-show="ball.show" class="ball">
+      <div class="inner"></div>
+    </div>
+  </transition-group>
 </div>
 </template>
 
@@ -41,6 +46,13 @@ export default {
       default: 0
     }
   },
+  data() {
+    return {
+      balls: [
+        {show: false}, {show: false}, {show: false}, {show: false}, {show: false}
+      ]
+    }
+  },
   computed: {
     totalPrice() {
       let total = 0
@@ -65,6 +77,11 @@ export default {
       } else {
         return '去结算'
       }
+    }
+  },
+  methods: {
+    drop(el) {
+      console.log(el)
     }
   }
 }
@@ -156,4 +173,19 @@ export default {
           &.enough
             background: #00b43c
             color: #fff
+    .ball-container
+      .ball
+        position: fixed
+        left: 32px
+        bottom: 22px
+        z-index: 100
+        .inner
+          width: 16px
+          height:16px
+          -webkit-border-radius: 50%
+          -moz-border-radius: 50%
+          border-radius: 50%
+          background: rgb(0,160,220)
+          &.drop-enter-active,&.drop-leave-active
+            transition: all 0.4s
 </style>

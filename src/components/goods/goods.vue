@@ -25,8 +25,8 @@
                 <div class="price">
                   <span class="now">￥{{food.price}}</span><span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
-                <div class="carcontroll-wapper">
-                  <carcontroll :food="food"></carcontroll>
+                <div class="cartcontrol-wapper">
+                  <cartcontrol :food="food" @cartAdd="_drop"></cartcontrol> <!--//监听子组件触发的carAdd事件,然后调用_drop方法-->
                 </div>
               </div>
             </li>
@@ -34,14 +34,15 @@
         </li>
       </ul>
     </div>
-    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <!--子组件通过ref绑定绑定一个引用id，方便父组件访问该子组件-->
+    <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
   import shopcart from '../shopcart/shopcart.vue'
-  import carcontroll from '../cartcontroll/cartcontroll.vue'
+  import cartcontrol from '../cartcontrol/cartcontrol.vue'
 
   const ERR_OK = 0
   export default {
@@ -67,6 +68,17 @@
           }
         }
         return 0
+      },
+      selectFoods() {
+        let foods = []
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food)
+            }
+          })
+        })
+        return foods
       }
     },
     created() {
@@ -97,6 +109,7 @@
         })
 
         this.foodScroll = new BScroll(this.$refs.foodsWrapper, {
+          click: true,  // 初始化左侧导航菜单滚动时，允许点击事件
           probeType: 3
         })
         this.foodScroll.on('scroll', (pos) => {
@@ -112,12 +125,20 @@
           height += item.clientHeight
           this.listHeight.push(height)
         }
+      },
+      _drop(target) {
+        this.$refs.shopcart.drop(target)  // 父组件通过绑定的引用id：shopcart来访问子组件，并调用drop方法
       }
     },
     components: {
       shopcart,
-      carcontroll
+      cartcontrol
     }
+//    events: {
+//      'cart.add'(target) {
+//        this._drop(target)
+//      }
+//    }
   }
 </script>
 
@@ -225,4 +246,8 @@
             text-decoration:line-through
             font-size: 10px
             color: rgb(147,153,159)
+        .cartcontrol-wapper
+          position: absolute
+          right: 0
+          bottom: 12px
 </style>
