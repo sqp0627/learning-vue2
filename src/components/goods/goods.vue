@@ -2,7 +2,7 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuWrapper">
       <ul>
-        <li v-for="(item,index) in goods" class="menu-item" :class="{'current': currentIndex === index}">
+        <li v-for="(item,index) in goods" class="menu-item" :class="{'current': currentIndex === index}" @click="selectMenu(index,$event)">
           <span class="text border-1px"><span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}</span>
         </li>
       </ul>
@@ -25,17 +25,23 @@
                 <div class="price">
                   <span class="now">￥{{food.price}}</span><span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="carcontroll-wapper">
+                  <carcontroll :food="food"></carcontroll>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
+    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
+  import shopcart from '../shopcart/shopcart.vue'
+  import carcontroll from '../cartcontroll/cartcontroll.vue'
 
   const ERR_OK = 0
   export default {
@@ -56,11 +62,11 @@
         for (let i = 0; i < this.listHeight.length; i++) {
           let height1 = this.listHeight[i]
           let height2 = this.listHeight[i + 1]
-          if (!height2 || (this.scrollY > height1 && this.scrollY < height2)) {
+          if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
             return i
           }
-          return 0
         }
+        return 0
       }
     },
     created() {
@@ -77,14 +83,24 @@
       })
     },
     methods: {
+      selectMenu(index, event) {
+        if (!event._constructed) { // 阻止betterScroll派发的点击事件
+          return
+        }
+        let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook')
+        let el = foodList[index]
+        this.foodScroll.scrollToElement(el, 300)
+      },
       _initScroll() {
-        this.menuScroll = new BScroll(this.$refs.menuWrapper, {})
+        this.menuScroll = new BScroll(this.$refs.menuWrapper, {
+          click: true  // 初始化左侧导航菜单滚动时，允许点击事件
+        })
 
         this.foodScroll = new BScroll(this.$refs.foodsWrapper, {
           probeType: 3
         })
         this.foodScroll.on('scroll', (pos) => {
-          this.scrollY = Math.round(pos.y)
+          this.scrollY = Math.abs(Math.round(pos.y))
         })
       },
       _calculateHeight() {
@@ -97,6 +113,10 @@
           this.listHeight.push(height)
         }
       }
+    },
+    components: {
+      shopcart,
+      carcontroll
     }
   }
 </script>
@@ -120,6 +140,14 @@
         width: 56px
         padding: 0 12px
         line-height: 14px
+        &.current
+          background: #fff
+          position: relative;
+          margin-top: -1px
+          z-index: 10
+          .text
+            border-none()
+            font-weight: 700
         .icon
           display: inline-block
           width: 18px
