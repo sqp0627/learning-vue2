@@ -1,7 +1,7 @@
 <template>
   <div class="cart-control">
     <transition name="move">
-      <div class="cart-decrease icon-remove_circle_outline" v-show="food.count>0" @click="decreaseCart($event)" transition="move"></div>
+      <div class="cart-decrease icon-remove_circle_outline" v-show="food.count>0" @click="decreaseCart($event)"></div>
     </transition>
     <div class="cart-count" v-show="food.count>0">{{food.count}}</div>
     <div class="cart-add icon-add_circle" @click="addCart($event)"></div>
@@ -15,8 +15,6 @@
       food: {
         type: Object
       }
-    },
-    created() {
     },
     methods: {
       addCart(event) {
@@ -53,8 +51,8 @@
       color: rgb(0,160,220)
       &.move-enter-active,&.move-leave-active
         transition: all 0.4s ease
-      &.move-enter,&.move-leave-active
-        transform: translateX(24px);
+      &.move-enter,&.move-leave-to
+        transform: translate3d(24px,0,0)
         opacity: 0
     .cart-count
       display: inline-block

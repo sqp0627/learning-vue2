@@ -109,7 +109,7 @@
         })
 
         this.foodScroll = new BScroll(this.$refs.foodsWrapper, {
-          click: true,  // 初始化左侧导航菜单滚动时，允许点击事件
+          click: true,  // 初始化食物展示列表时，允许点击事件
           probeType: 3
         })
         this.foodScroll.on('scroll', (pos) => {
@@ -134,11 +134,6 @@
       shopcart,
       cartcontrol
     }
-//    events: {
-//      'cart.add'(target) {
-//        this._drop(target)
-//      }
-//    }
   }
 </script>
 
