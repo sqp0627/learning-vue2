@@ -12,7 +12,7 @@
         <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods" class="foods-item border-1px">
+            <li @click="selectFood(food,$event)" v-for="food in item.foods" class="foods-item border-1px">
               <div class="icon">
                 <img width="57" height="57" :src="food.icon" alt="">
               </div>
@@ -36,6 +36,7 @@
     </div>
     <!--子组件通过ref绑定绑定一个引用id，方便父组件访问该子组件-->
     <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <food ref="food" :food="selectedFood"></food>
   </div>
 </template>
 
@@ -43,6 +44,7 @@
   import BScroll from 'better-scroll'
   import shopcart from '../shopcart/shopcart.vue'
   import cartcontrol from '../cartcontrol/cartcontrol.vue'
+  import food from '../food/food.vue'
 
   const ERR_OK = 0
   export default {
@@ -55,7 +57,8 @@
       return {
         goods: [],
         listHeight: [],
-        scrollY: 0
+        scrollY: 0,
+        selectedFood: {}
       }
     },
     computed: {
@@ -128,11 +131,19 @@
       },
       _drop(target) {
         this.$refs.shopcart.drop(target)  // 父组件通过绑定的引用id：shopcart来访问子组件，并调用drop方法
+      },
+      selectFood(food, event) {
+        if (!event._constructed) { // 阻止betterScroll派发的点击事件
+          return
+        }
+        this.selectedFood = food
+        this.$refs.food.show()
       }
     },
     components: {
       shopcart,
-      cartcontrol
+      cartcontrol,
+      food
     }
   }
 </script>
@@ -227,6 +238,8 @@
         .desc
           margin-bottom: 8px
           line-height: 12px
+          height: auto
+          width: 100%
         .extra
           .count
             margin-right: 12px;
