@@ -192,7 +192,7 @@
         if (this.totalPrice < this.minPrice) {
           return
         }
-        window.alert(`需要支付${this.totalPrice}元`)
+        window.alert(`需要支付${this.totalPrice + this.deliveryPrice}元`)
       }
     },
     components: {

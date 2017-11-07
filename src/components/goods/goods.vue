@@ -36,7 +36,7 @@
     </div>
     <!--子组件通过ref绑定绑定一个引用id，方便父组件访问该子组件-->
     <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
-    <food ref="food" :food="selectedFood"></food>
+    <food ref="food" :food="selectedFood" @cartAdd="_drop" @setTarget="_drop"></food>
   </div>
 </template>
 
@@ -96,7 +96,13 @@
           })
         }
       })
+      this.$root.eventHub.$on('cartAdd', (target) => {
+//        this.$refs.shopcart.drop(target)
+      })
     },
+//    beforeDestroy() {
+//      this.$root.eventHub.$off('cartAdd')
+//    },
     methods: {
       selectMenu(index, event) {
         if (!event._constructed) { // 阻止betterScroll派发的点击事件

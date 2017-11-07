@@ -27,6 +27,7 @@
           this.food.count++
         }
         this.$emit('cartAdd', event.target) // 主动触发carAdd方法，传递数据‘event.target’
+//        this.$root.eventHub.$emit('cartAdd', event.target)
       },
       decreaseCart(event) {
         if (!event._constructed) { // 阻止betterScroll派发的点击事件

@@ -18,7 +18,7 @@
           </div>
         </div>
         <div class="cartcontrol-wrapper">
-          <cartcontrol @cartAdd="_drop" :food="food" v-show="food.count>0"></cartcontrol>
+          <cartcontrol :food="food" v-show="food.count>0" @cartAdd="getTarget"></cartcontrol>
         </div>
         <transition name="fade">
           <div @click="addFirst" class="buy" v-show="!food.count || food.count===0">加入购物车</div>
@@ -67,11 +67,11 @@
         if (!event._constructed) {
           return
         }
-        this.$emit('cartAdd', event.target) // 主动触发carAdd方法，传递数据‘event.target’
         Vue.set(this.food, 'count', 1)
+        this.$emit('cartAdd', event.target) // 主动触发carAdd方法，传递数据‘event.target’
       },
-      _drop(target) {
-        console.log(target)
+      getTarget(target) {
+        this.$emit('setTarget', target)
       }
     }
   }
