@@ -117,7 +117,6 @@
         }
       },
       setOnlyContent(type) {
-        console.log(type)
         this.onlyContent = type
         this.$nextTick(() => {
           this.scroll.refresh()
