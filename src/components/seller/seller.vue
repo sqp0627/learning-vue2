@@ -94,27 +94,40 @@
     },
     watch: {
       seller: function () {
-        console.log(this.seller)
         this._initScroll()
+        this._initPics()
       }
     },
     mounted() {
-      this.picScroll = new BScroll(this.$refs.picWrapper, {
-        scrollX: true,
-        eventPassthrough: 'vertical'
-      })
+      this._initScroll()
+      this._initPics()
     },
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
     },
     methods: {
       _initScroll () {
-        if (!this.scroll) {
-          this.scroll = new BScroll(this.$refs.seller, {
-            click: true
-          })
-        }
-        console.log(111)
+        this.$nextTick(() => {
+          if (!this.scroll) {
+            this.scroll = new BScroll(this.$refs.seller, {
+              click: true
+            })
+          } else {
+            this.scroll.refresh()
+          }
+        })
+      },
+      _initPics () {
+        this.$nextTick(() => {
+          if (!this.picScroll) {
+            this.picScroll = new BScroll(this.$refs.picWrapper, {
+              scrollX: true,
+              eventPassthrough: 'vertical'
+            })
+          } else {
+            this.picScroll.refresh()
+          }
+        })
       },
       toggleFavorite(event) {
         if (!event._constructed) {
